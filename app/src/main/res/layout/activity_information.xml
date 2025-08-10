@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.glaucoma.ai.ui.splash.AuthCommonVM" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_gray"
+        tools:context=".ui.splash.MeetingActivity">
+
+
+        <!--     <android.opengl.GLSurfaceView
+                 android:id="@+id/effectView"
+                 android:layout_width="match_parent"
+                 android:visibility="visible"
+                 android:alpha="0"
+                 app:layout_constraintTop_toTopOf="parent"
+                 android:layout_height="0dp" />-->
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_gray"
+            app:layout_constraintTop_toBottomOf="@+id/view">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTitle"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/new_profile"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:tint="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/consStatus">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAge"
+                style="@style/TextView_500_Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:text="Age"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtAge"
+                style="@style/TextView_400_Regular"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/radius_border_edt"
+                android:hint="Enter your age"
+                android:inputType="number"
+                android:maxLength="2"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt"
+                app:layout_constraintTop_toBottomOf="@+id/tvAge" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvGender"
+                style="@style/TextView_500_Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="Gender"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtAge" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etGender"
+                style="@style/TextView_400_Regular"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/radius_border_edt"
+                android:focusable="false"
+                android:hint="Select gender"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/edt"
+                app:layout_constraintTop_toBottomOf="@+id/tvGender" />
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/showGender"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:rotation="-90"
+                android:src="@drawable/drop_down"
+                android:tint="@color/edt"
+                app:layout_constraintBottom_toBottomOf="@+id/etGender"
+                app:layout_constraintEnd_toEndOf="@+id/etGender"
+                app:layout_constraintTop_toTopOf="@+id/etGender" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvEthnicity"
+                style="@style/TextView_500_Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="Ethnicity"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etGender" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtEthnicity"
+                style="@style/TextView_400_Regular"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/radius_border_edt"
+                android:focusable="false"
+                android:hint="Select ethnicity"
+                android:inputType="number"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:textColorHint="@color/edt"
+                app:layout_constraintTop_toBottomOf="@+id/tvEthnicity" />
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/showEthnicity"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:rotation="-90"
+                android:src="@drawable/drop_down"
+                android:tint="@color/edt"
+                app:layout_constraintBottom_toBottomOf="@+id/edtEthnicity"
+                app:layout_constraintEnd_toEndOf="@+id/edtEthnicity"
+                app:layout_constraintTop_toTopOf="@+id/edtEthnicity" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRightEye"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:text="Right Eye"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtEthnicity" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRightEyeCamera"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@drawable/radius_border_edt"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="Camera"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRightEye" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRightEyeCameraSuccess"
+                style="@style/TextView_500_Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scanned Successfully"
+                android:textColor="@color/green"
+                android:textSize="@dimen/_11ssp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/tvRightEyeCamera"
+                app:layout_constraintTop_toBottomOf="@+id/tvRightEyeCamera" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivRightCamera"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:scaleType="centerCrop"
+
+                app:layout_constraintBottom_toBottomOf="@+id/tvRightEyeCamera"
+                app:layout_constraintStart_toEndOf="@+id/tvRightEyeCamera"
+                app:layout_constraintTop_toTopOf="@+id/tvRightEyeCamera"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRightEyeGallery"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/radius_border_edt"
+                android:backgroundTint="@color/blue"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="Gallery"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRightEye" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivRightGallery"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:scaleType="centerCrop"
+
+                app:layout_constraintBottom_toBottomOf="@+id/tvRightEyeGallery"
+                app:layout_constraintEnd_toStartOf="@+id/tvRightEyeGallery"
+                app:layout_constraintTop_toTopOf="@+id/tvRightEyeGallery"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRightEyeGallerySuccess"
+                style="@style/TextView_500_Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:singleLine="true"
+                android:text="Scanned Successfully"
+                android:visibility="gone"
+                android:textColor="@color/green"
+                android:textSize="@dimen/_11ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/ivRightGallery"
+                app:layout_constraintTop_toBottomOf="@+id/tvRightEyeGallery" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLeftEye"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_22sdp"
+                android:text="Left Eye"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRightEyeCamera" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLeftEyeCamera"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@drawable/radius_border_edt"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="Camera"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLeftEye" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLeftEyeCameraSuccess"
+                style="@style/TextView_500_Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scanned Successfully"
+                android:textColor="@color/green"
+                android:visibility="gone"
+                android:textSize="@dimen/_11ssp"
+                app:layout_constraintStart_toStartOf="@+id/tvLeftEyeCamera"
+                app:layout_constraintTop_toBottomOf="@+id/tvLeftEyeCamera" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivLeftCamera"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:scaleType="centerCrop"
+
+                app:layout_constraintBottom_toBottomOf="@+id/tvLeftEyeCamera"
+                app:layout_constraintStart_toEndOf="@+id/tvLeftEyeCamera"
+                app:layout_constraintTop_toTopOf="@+id/tvLeftEyeCamera"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLeftEyeGallery"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/radius_border_edt"
+                android:backgroundTint="@color/blue"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="Gallery"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLeftEye" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivLeftGallery"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:scaleType="centerCrop"
+
+                app:layout_constraintBottom_toBottomOf="@+id/tvLeftEyeGallery"
+                app:layout_constraintEnd_toStartOf="@+id/tvLeftEyeGallery"
+                app:layout_constraintTop_toTopOf="@+id/tvLeftEyeGallery"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10Percent" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLeftEyeGallerySuccess"
+                style="@style/TextView_500_Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:singleLine="true"
+                android:text="Scanned Successfully"
+                android:visibility="gone"
+                android:textColor="@color/green"
+                android:textSize="@dimen/_11ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/ivLeftGallery"
+                app:layout_constraintTop_toBottomOf="@+id/tvLeftEyeGallery" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btnSignIn"
+                style="@style/TextView_700_Bold"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:background="@drawable/radius_border"
+                android:focusable="false"
+                android:gravity="center"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:text="Start Scan"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintTop_toBottomOf="@+id/tvLeftEyeCamera"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>

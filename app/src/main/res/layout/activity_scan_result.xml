@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.glaucoma.ai.ui.splash.AuthCommonVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_gray">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_gray"
+            app:layout_constraintTop_toBottomOf="@+id/view">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTitle"
+                style="@style/TextView_700_Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/scan_results"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBack"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:tint="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/consStatus">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvNewProfile"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_160sdp"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/ivPersonImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/app_logo" />
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvResultTitle"
+                        style="@style/TextView_700_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_25sdp"
+                        android:gravity="center"
+                        android:text="Glaucoma Detected"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_18ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/card" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvConfidence"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="center"
+
+                        android:text="Right Eye"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvResultTitle" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvRightEyeText"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:text="Confidence: 95%"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvConfidence" />
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardLeft"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_160sdp"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintTop_toBottomOf="@+id/tvRightEyeText">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/ivPersonImageLeft"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/app_logo" />
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvResultTitleLeft"
+                        style="@style/TextView_700_Bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_25sdp"
+                        android:gravity="center"
+                        android:text="Glaucoma Detected"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_18ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardLeft" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvConfidenceLeft"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:text="Left Eye"
+
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvResultTitleLeft" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:id="@+id/tvLeftEyeText"
+                        style="@style/TextView_400_Regular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:text="Confidence: 95%"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvConfidenceLeft" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_20sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLeftEyeText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNewProfile"
+                style="@style/TextView_700_Bold"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/radius_border"
+                android:gravity="center"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:text="@string/new_profile"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/tvRescan" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRescan"
+                style="@style/TextView_700_Bold"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/radius_border"
+                android:backgroundTint="@color/gray_edt"
+                android:gravity="center"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:text="Update Profile"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/tvScanOtherEye" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvScanOtherEye"
+                style="@style/TextView_700_Bold"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/_40sdp"
+                android:background="@drawable/radius_border"
+                android:backgroundTint="@color/black"
+                android:gravity="center"
+                android:onClick="@{v ->vm.onClick(v)}"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:text="Scan Other Eye"
+                android:textColor="@color/white_gray"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:layout_editor_absoluteX="19dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Glaucoscan.ai</string>
+    <string name="session_expired">session_expired</string>
+    <string name="alert">Alert</string>
+    <string name="post_detail">Post Detail</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="plz_wait">Plz wait</string>
+    <string name="error_found">Error Found</string>
+    <string name="click_me">Click Me</string>
+    <string name="android_base_2025">Android Base 2025</string>
+    <string name="todo">TODO</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="eye_scan">Eye Scan</string>
+    <string name="visualization">Visualization</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="important_information">Important Information</string>
+    <string name="accessible_ai_for_early_nglaucoma_detection">Accessible AI for Early\nGlaucoma Detection</string>
+    <string name="new_profile">New Profile</string>
+    <string name="scan_results">Scan Results</string>
+</resources>
