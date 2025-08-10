@@ -1,16 +1,23 @@
-# Glaucoma AI Android App
+![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Stars](https://img.shields.io/github/stars/KrishNachnani/glaucoscan-android?style=social)
+![Downloads](https://img.shields.io/github/downloads/KrishNachnani/glaucoscan-android/total)
+
+# Glaucoscan AI Android App
 
 ## Description
 Glaucoma AI is an Android application that leverages machine learning to assist in glaucoma detection from eye images. Users can capture or select images of their eyes, input demographic information, and receive instant analysis powered by a TensorFlow Lite model.
 
 ## Technologies Used
-- **Kotlin** & **Java** (Android development)
-- **Android Jetpack** (ViewModel, LiveData, Activity Result APIs)
-- **TensorFlow Lite** (on-device ML inference)
-- **Dagger Hilt** (dependency injection)
-- **Gradle** (build system)
+- **Kotlin** & **Java**  (Android development)
+- **Android Jetpack** (Data Binding, View Binding, ConstraintLayout, CameraX)
 - **Material Components** (UI/UX)
-- **Custom Bottom Sheets** & **RecyclerView Adapters**
+- **Hilt** for dependency injection
+- **TensorFlow Lite** for on-device machine learning
+- **ML Kit – Face Detection**
+- **Retrofit** & **OkHttp** for networking
+- **Glide** for image loading
+- **Gradle** (build system)
+
 
 ## Installation
 
