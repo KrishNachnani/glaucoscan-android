@@ -1,6 +1,6 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Stars](https://img.shields.io/github/stars/KrishNachnani/glaucoscan-android?style=social)
-![Downloads](https://img.shields.io/github/downloads/KrishNachnani/glaucoscan-android/total)
+![Downloads](https://img.shields.io/github/downloads/KrishNachnani/glaucoscan-android/total?cacheSeconds=60)
 
 # Glaucoscan AI Android App
 
