@@ -21,9 +21,12 @@ activity = "1.10.0"
 constraintlayout = "2.2.0"
 dagger = "2.51.1"
 okhttp = "5.0.0-alpha.3"
+photofilter = "2.0.2"
 playServicesLocation = "21.3.0"
 sdpAndroid = "1.1.0"
 sspAndroid = "1.1.0"
+tensorflowLite = "2.17.0"
+tensorflowLiteSupport = "0.5.0"
 
 [libraries]
 android-spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "androidSpinkit" }
@@ -47,10 +50,13 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 dagger_compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+photofilter = { module = "com.github.mukeshsolanki:photofilter", version.ref = "photofilter" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterMoshi" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 
 
 
