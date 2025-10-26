@@ -87,7 +87,7 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
         }
     }
 
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         binding.edtAge.clearFocus()
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.edtAge.windowToken, 0)
@@ -150,7 +150,6 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
                     val gender = binding.etGender.text.toString().trim()
                     val age = binding.edtAge.text.toString().trim()
                     val ethnicity = binding.edtEthnicity.text.toString().trim()
-
                     when {
                         /*  age.isEmpty() -> {
                               Toast.makeText(this, "Please enter age", Toast.LENGTH_SHORT).show()
@@ -211,8 +210,8 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
         BindingUtils.statusBarStyleBlack(this)
         BindingUtils.styleSystemBars(this, getColor(R.color.black))
         genderBottomSheet()
-      //  tflite = Interpreter(loadModelFile("adversarial_model.tflite"))
-        tflite = Interpreter(loadModelFile("glaucoma_model.tflite"))
+        tflite = Interpreter(loadModelFile("adversarial_model.tflite"))
+      // tflite = Interpreter(loadModelFile("glaucoma_model.tflite"))
 
         /*  photoFilter = PhotoFilter(binding.effectView, object : OnProcessingCompletionListener {
               override fun onProcessingComplete(bitmap: Bitmap) {
@@ -396,7 +395,7 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
         }
 
 
-    private fun runModel(bitmap: Bitmap): Float {
+/*    private fun runModel(bitmap: Bitmap): Float {
         val tensorImage = TensorImage(DataType.FLOAT32)
         tensorImage.load(bitmap)
         val imageProcessor = ImageProcessor.Builder()
@@ -410,7 +409,48 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
         val result = outputBuffer.floatArray[0]
         Log.d("MODEL_OUTPUT", "Prediction Score: $result")
         return result
+    }*/
+
+    private fun runModel(bitmap: Bitmap): String {
+        val tensorImage = TensorImage(DataType.FLOAT32)
+        tensorImage.load(bitmap)
+
+        val imageProcessor = ImageProcessor.Builder()
+            .add(ResizeOp(inputSize, inputSize, ResizeOp.ResizeMethod.BILINEAR))
+            .add(NormalizeOp(0f, 255f)) // Normalize pixel values to [0,1]
+            .build()
+
+        val processedImage = imageProcessor.process(tensorImage)
+        val inputBuffer = processedImage.buffer
+
+        val outputBuffer = TensorBuffer.createFixedSize(intArrayOf(1, 2), DataType.FLOAT32)
+        tflite.run(inputBuffer, outputBuffer.buffer.rewind())
+
+        val logits = outputBuffer.floatArray
+        val softmax = applySoftmax(logits)
+
+        val glaucomaProbability = softmax[0]          // Glaucoma
+        val noGlaucomaProbability = softmax[1]        // No Glaucoma
+
+        Log.d("Prediction", "Glaucoma: $glaucomaProbability | No Glaucoma: $noGlaucomaProbability")
+
+        return if (glaucomaProbability > noGlaucomaProbability) {
+            Log.d("Prediction", "✅ Glaucoma Detected with Probability: $glaucomaProbability")
+            "%.2f".format(glaucomaProbability * 100)
+        } else {
+            Log.d("Prediction", "❎ No Glaucoma Detected with Probability: $noGlaucomaProbability")
+            "%.2f".format(noGlaucomaProbability * 100)
+        }
     }
+    private fun applySoftmax(logits: FloatArray): FloatArray {
+        val expValues = logits.map { Math.exp(it.toDouble()) }
+        val sumExp = expValues.sum()
+        return expValues.map { (it / sumExp).toFloat() }.toFloatArray()
+    }
+
+
+
+
 
 
     private fun loadModelFile(filename: String): ByteBuffer {
@@ -426,8 +466,8 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
 
     private fun analyzeGlaucoma(bitmap: Bitmap): GlaucomaResult {
         val result = runModel(bitmap) // Your TFLite model output
-        val confidenceFloat = String.format(Locale.US, "%.2f", result).toFloat()
-        val confidencePercent = (confidenceFloat * 100).toInt()
+        val confidenceFloat = String.format(Locale.US, "%.2f", result.toFloat()).toFloat()
+        val confidencePercent = (confidenceFloat).toInt()
 
         return if (confidenceFloat > 0.40f) {
             GlaucomaResult(
