@@ -1,10 +1,14 @@
 package com.glaucoma.ai.ui.scanner_result
 
 import GlaucomaResult
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -135,7 +139,6 @@ class ScanResultActivity : BaseActivity<ActivityScanResultBinding>() {
                         )
                     } catch (e: Exception) {
                         e.printStackTrace()
-
                         nullValueFuction()
                         val intent = Intent(this, InformationActivity::class.java)
                         startActivity(intent)
@@ -191,9 +194,7 @@ class ScanResultActivity : BaseActivity<ActivityScanResultBinding>() {
                         )
                     } catch (e: Exception) {
                         e.printStackTrace()
-
                         nullValueFuction()
-
                         val intent = Intent(this, InformationActivity::class.java)
                         intent.putExtra("from", "rescan")
                         startActivity(intent)
@@ -242,7 +243,71 @@ class ScanResultActivity : BaseActivity<ActivityScanResultBinding>() {
             // Use result in your UI
         }
     }
+    // Save using MediaStore (Android 10+)
+    private fun saveImageMediaStore(context: Context, bitmap: Bitmap, fileName: String): String {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/glaucoscan.ai")
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.IS_PENDING, 1)
+            }
+        }
+
+        val uri = context.contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        ) ?: throw Exception("Failed to create MediaStore entry")
+
+        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+            if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)) {
+                throw Exception("Failed to compress bitmap")
+            }
+        } ?: throw Exception("Failed to open output stream")
+
+        // Mark as complete
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.clear()
+            contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+            context.contentResolver.update(uri, contentValues, null, null)
+        }
+
+        Log.d("ImageSave", "Saved via MediaStore: $fileName at $uri")
+        return fileName
+    }
+
+    // Save using legacy file system (Android 9 and below)
+    private fun saveImageLegacy(context: Context, bitmap: Bitmap, fileName: String): String {
+        val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val folder = File(picturesDir, "glaucoscan.ai")
+
+        if (!folder.exists()) {
+            if (!folder.mkdirs()) {
+                throw Exception("Failed to create directory: ${folder.absolutePath}")
+            }
+        }
+
+        val imageFile = File(folder, fileName)
+
+        FileOutputStream(imageFile).use { outputStream ->
+            if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)) {
+                throw Exception("Failed to compress bitmap")
+            }
+            outputStream.flush()
+        }
+
+        // Notify media scanner
+        MediaScannerConnection.scanFile(
+            context,
+            arrayOf(imageFile.absolutePath),
+            arrayOf("image/jpeg"),
+            null
+        )
+
+        Log.d("ImageSave", "Saved via legacy method: ${imageFile.absolutePath}")
+        return fileName
+    }
     private fun savePredictedImage(
         context: Context,
         bitmap: Bitmap,
@@ -255,7 +320,6 @@ class ScanResultActivity : BaseActivity<ActivityScanResultBinding>() {
         val timeStamp = System.currentTimeMillis()
         val sdf = java.text.SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault())
         val dateTime = sdf.format(java.util.Date(timeStamp))
-
         val labelGlaucoma = if (isGlaucoma) "1" else "0"
         val genderLabel = if (gender.lowercase() == "male") "m" else "f"
 //        val fileName = "image-$dateTime-$genderLabel-$age-$ethnicity-$labelGlaucoma-$isEyePos.jpeg"
@@ -289,20 +353,38 @@ class ScanResultActivity : BaseActivity<ActivityScanResultBinding>() {
         var fileNameRight=""
 
         if (imageBitmapLeft != null){
-            val imageFile = File(folder, fileName)
-            fileNameLeft=imageFile.name
-            val outputStream = FileOutputStream(imageFile)
-            imageBitmapLeft!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
+//            val imageFile = File(folder, fileName)
+//            fileNameLeft=imageFile.name
+//            val outputStream = FileOutputStream(imageFile)
+//            imageBitmapLeft!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+//            outputStream.flush()
+//            outputStream.close()
+//            val fileName = "image-$dateTime-$genderLabel-$age-$ethnicity-$labelGlaucoma-l.jpeg"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Android 10+ (Use MediaStore)
+                fileNameLeft = saveImageMediaStore(context, imageBitmapLeft!!, fileName)
+            } else {
+                // Android 9 and below (Legacy)
+                fileNameLeft = saveImageLegacy(context, imageBitmapLeft!!, fileName)
+            }
         }
         if (imageBitmap  != null){
-            val imageFile = File(folder, fileName2)
-            fileNameRight=imageFile.name
-            val outputStream = FileOutputStream(imageFile)
-            imageBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
+//            val imageFile = File(folder, fileName2)
+//            fileNameRight=imageFile.name
+//            val outputStream = FileOutputStream(imageFile)
+//            imageBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+//            outputStream.flush()
+//            outputStream.close()
+//            val fileName2 = "image-$dateTime-$genderLabel-$age-$ethnicity-$labelGlaucoma-r.jpeg"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Android 10+ (Use MediaStore)
+                fileNameRight = saveImageMediaStore(context, imageBitmap!!, fileName2)
+            } else {
+                // Android 9 and below (Legacy)
+                fileNameRight = saveImageLegacy(context, imageBitmap!!, fileName2)
+            }
         }
 
 
@@ -311,6 +393,8 @@ class ScanResultActivity : BaseActivity<ActivityScanResultBinding>() {
         Toast.makeText(context, "Image Saved: ${fileNameLeft},${fileNameRight}", Toast.LENGTH_SHORT).show()
         when (isClicked) {
             "tvNewProfile" -> {
+                imageBitmap= null
+                imageBitmapLeft= null
                 nullValueFuction()
                 val intent = Intent(this, InformationActivity::class.java)
                 startActivity(intent)
@@ -383,20 +467,39 @@ var fileNameLeft=""
 var fileNameRight=""
 
         if (imageBitmapLeft != null){
-            val imageFile = File(folder, fileName)
-            fileNameLeft=imageFile.name
-            val outputStream = FileOutputStream(imageFile)
-            imageBitmapLeft!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
+//            val imageFile = File(folder, fileName)
+//            fileNameLeft=imageFile.name
+//            val outputStream = FileOutputStream(imageFile)
+//            imageBitmapLeft!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+//            outputStream.flush()
+//            outputStream.close()
+//            val fileName = "image-$dateTime-$genderLabel-$age-$ethnicity-$labelGlaucoma-l.jpeg"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Android 10+ (Use MediaStore)
+                fileNameLeft = saveImageMediaStore(context, imageBitmapLeft!!, fileName)
+            } else {
+                // Android 9 and below (Legacy)
+                fileNameLeft = saveImageLegacy(context, imageBitmapLeft!!, fileName)
+            }
         }
         if (imageBitmap  != null){
-            val imageFile = File(folder, fileName2)
-            fileNameRight=imageFile.name
-            val outputStream = FileOutputStream(imageFile)
-            imageBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
+//            val imageFile = File(folder, fileName2)
+//            fileNameRight=imageFile.name
+
+//            val fileName2 = "image-$dateTime-$genderLabel-$age-$ethnicity-$labelGlaucoma-r.jpeg"
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Android 10+ (Use MediaStore)
+                fileNameRight = saveImageMediaStore(context, imageBitmap!!, fileName2)
+            } else {
+                // Android 9 and below (Legacy)
+                fileNameRight = saveImageLegacy(context, imageBitmap!!, fileName2)
+            }
+//            val outputStream = FileOutputStream(imageFile)
+//            imageBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+//            outputStream.flush()
+//            outputStream.close()
         }
 
 
@@ -438,6 +541,9 @@ var fileNameRight=""
         InformationActivity.leftEyePosition = null //0 camera 1 for gallery
         InformationActivity.resultScanDataRight = null
         InformationActivity.resultScanDataLeft = null
+//        imageBitmap= null
+//        imageBitmapLeft= null
+
         Constants.age = ""
         Constants.gender = ""
         Constants.ethnicity = ""

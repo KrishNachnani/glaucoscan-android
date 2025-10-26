@@ -1,0 +1,13 @@
+# Gradle build folders
+.gradle/
+**/build/
+
+# Local config
+local.properties
+
+# IDE config
+.idea/
+*.iml
+
+# MacOS finder file
+.DS_Store
