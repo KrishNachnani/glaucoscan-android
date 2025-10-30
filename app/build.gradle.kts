@@ -71,14 +71,9 @@ dependencies {
 
     implementation(libs.android.spinkit)
 
-    implementation("androidx.camera:camera-camera2:1.3.0")
-    implementation("androidx.camera:camera-lifecycle:1.3.0")
-    implementation("androidx.camera:camera-view:1.3.0")
-    implementation("com.google.mlkit:face-detection:16.1.5")
-
-    implementation("org.tensorflow:tensorflow-lite:2.13.0")
-    implementation("org.tensorflow:tensorflow-lite-support:0.4.3")
-    implementation("com.github.mukeshsolanki:photofilter:2.0.2")
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.photofilter)
 
 
 }

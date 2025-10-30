@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/radius_border_edt"
+    android:padding="24dp">
+
+    <TextView
+        style="@style/TextView_700_Bold"
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Want to test Glaucoscan with sample images?"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        android:textColor="#222222"
+        android:gravity="center"
+        android:paddingBottom="12dp" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        style="@style/TextView_500_Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Click below to download sample images for testing."
+        android:textSize="@dimen/_12ssp"
+        android:visibility="gone"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:paddingBottom="20dp" />
+
+    <Button
+        android:id="@+id/btnGlaucoma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextView_500_Medium"
+        android:text="Try Sample Images"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textSize="@dimen/_13ssp"
+        android:background="@drawable/radius_border"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:id="@+id/btnNonGlaucoma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextView_500_Medium"
+        android:text="Download Non-Glaucoma Images"
+        android:background="@drawable/radius_border"
+        android:backgroundTint="@color/black"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13ssp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skip"
+        android:textColor="#007BFF"
+        style="@style/TextView_500_Medium"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingTop="6dp"
+        android:paddingBottom="4dp" />
+</LinearLayout>
