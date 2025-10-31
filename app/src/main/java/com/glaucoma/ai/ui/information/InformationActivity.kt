@@ -702,6 +702,7 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
         }
     }
 
+
     private fun downloadBothImages() {
         lifecycleScope.launch(Dispatchers.IO) {
             saveImageToGallery("1")       // Glaucoma
