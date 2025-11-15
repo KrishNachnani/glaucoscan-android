@@ -230,9 +230,7 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
 
         try {
             // Decode bitmap
-            val inputStream = resources.openRawResource(imageResId)
-            val originalBitmap = BitmapFactory.decodeStream(inputStream)
-            inputStream.close()
+            val originalBitmap = BitmapFactory.decodeResource(resources, imageResId)
 
             if (originalBitmap == null) return
 
@@ -289,9 +287,8 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
         BindingUtils.statusBarStyleBlack(this)
         BindingUtils.styleSystemBars(this, getColor(R.color.black))
         genderBottomSheet()
-        // tflite = Interpreter(loadModelFile("adversarial_model.tflite"))
-        tflite = Interpreter(loadModelFile("glaucoma_model.tflite"))
-        // tflite = Interpreter(loadModelFile("glaucoma_detector12.tflite"))
+        tflite = Interpreter(loadModelFile("glaucoma_image_to_prediction.tflite"))
+
     }
 
     private lateinit var bottomSheetCommon: BaseCustomBottomSheet<CommonBottomLayoutBinding>
@@ -461,50 +458,32 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
     private fun runModel(bitmap: Bitmap): Float {
         val tensorImage = TensorImage(DataType.FLOAT32)
         tensorImage.load(bitmap)
+
         val imageProcessor = ImageProcessor.Builder()
             .add(ResizeOp(inputSize, inputSize, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(0f, 255f)) // Normalize to [0, 1]
             .build()
         val processedImage = imageProcessor.process(tensorImage)
-        val inputBuffer = processedImage.buffer
-        val outputBuffer = TensorBuffer.createFixedSize(intArrayOf(1, 1), DataType.FLOAT32)
+
+        val inputBuffer = processedImage.buffer.rewind()
+
+        val outputShape = tflite.getOutputTensor(0).shape()  // should be [1, 1]
+        val outputBuffer = TensorBuffer.createFixedSize(outputShape, DataType.FLOAT32)
+
         tflite.run(inputBuffer, outputBuffer.buffer.rewind())
-        val result = outputBuffer.floatArray[0]
-        Log.d("MODEL_OUTPUT", "Prediction Score: $result")
-        return result
+
+        //Read scalar output = sigmoid = P(No Glaucoma) = P(class 1)
+        val outputs = outputBuffer.floatArray
+        if (outputs.size != 1) {
+            Log.w("MODEL_OUTPUT", "Unexpected output size: ${outputs.size}")
+        }
+
+        val pNoGlaucoma = outputs[0].coerceIn(0f, 1f)
+        Log.d("MODEL_OUTPUT", "P(No Glaucoma) from TFLite: $pNoGlaucoma")
+
+        return pNoGlaucoma
     }
 
-    /*  private fun runModel(bitmap: Bitmap): String {
-          val tensorImage = TensorImage(DataType.FLOAT32)
-          tensorImage.load(bitmap)
 
-          val imageProcessor = ImageProcessor.Builder()
-              .add(ResizeOp(inputSize, inputSize, ResizeOp.ResizeMethod.BILINEAR))
-              .add(NormalizeOp(0f, 255f)) // Normalize pixel values to [0,1]
-              .build()
-
-          val processedImage = imageProcessor.process(tensorImage)
-          val inputBuffer = processedImage.buffer
-
-          val outputBuffer = TensorBuffer.createFixedSize(intArrayOf(1, 2), DataType.FLOAT32)
-          tflite.run(inputBuffer, outputBuffer.buffer.rewind())
-
-          val logits = outputBuffer.floatArray
-          val softmax = applySoftmax(logits)
-
-          val glaucomaProbability = softmax[0]          // Glaucoma
-          val noGlaucomaProbability = softmax[1]        // No Glaucoma
-
-          Log.d("Prediction", "Glaucoma: $glaucomaProbability | No Glaucoma: $noGlaucomaProbability")
-
-          return if (glaucomaProbability > noGlaucomaProbability) {
-              Log.d("Prediction", "✅ Glaucoma Detected with Probability: $glaucomaProbability")
-              "%.2f".format(glaucomaProbability * 100)
-          } else {
-              Log.d("Prediction", "❎ No Glaucoma Detected with Probability: $noGlaucomaProbability")
-              "%.2f".format(noGlaucomaProbability * 100)
-          }
-      }*/
     private fun applySoftmax(logits: FloatArray): FloatArray {
         val expValues = logits.map { Math.exp(it.toDouble()) }
         val sumExp = expValues.sum()
@@ -524,30 +503,32 @@ class InformationActivity : BaseActivity<ActivityInformationBinding>() {
     }
 
     private fun analyzeGlaucoma(bitmap: Bitmap): GlaucomaResult {
-        val result = runModel(bitmap) // e.g. 0.78 (78% confidence)
-        // Convert to percentage properly
-        val confidenceFloat = (result * 100)
-        val confidencePercent = String.format(Locale.US, "%.2f", confidenceFloat).toFloat()
-        return if (result > 0.40f) {
-            val adjustedConfidence = if (confidencePercent.toInt() < 70) {
-                confidencePercent.toInt() + 26
-            } else {
-                confidencePercent.toInt()
-            }
+        // TFLite output = P(No Glaucoma)
+        val pNoGlaucoma = runModel(bitmap)          // TFLite sigmoid output
+        val pGlaucoma = 1f - pNoGlaucoma
 
+        val isGlaucoma = pNoGlaucoma < 0.5f
+
+        val chosenProb = if (isGlaucoma) pGlaucoma else pNoGlaucoma
+        val confidencePercent = (chosenProb * 100f)
+        val confidenceInt = confidencePercent.toInt()
+
+
+        return if (isGlaucoma) {
             GlaucomaResult(
-                isGlaucoma = true, confidence = adjustedConfidence, message = "Glaucoma Detected"
+                isGlaucoma = true,
+                confidence = confidenceInt,          // % confident it's Glaucoma
+                message = "Glaucoma Detected"
             )
         } else {
             GlaucomaResult(
                 isGlaucoma = false,
-                confidence = (100 - confidencePercent).toInt(),
+                confidence = confidenceInt,          // % confident it's No Glaucoma
                 message = "No Glaucoma Detected"
             )
         }
 
     }
-
 
     private fun handleImageVisibility(bitmap: Bitmap) {
         val keepPreviousVisible = isClicked.isNotEmpty() && isClicked == "tvScanOtherEye"

@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin1kept)
+    id("kotlin-kapt")
     id("kotlin-parcelize")
 }
 
@@ -14,9 +14,15 @@ android {
         applicationId = "com.glaucoma.ai"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 6
+        versionName = "1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Add 16 KB page size support
+        ndk {
+            // Play Store upload: ARM64 only
+            abiFilters.clear()
+            abiFilters.add("arm64-v8a")
+        }
     }
 
     buildFeatures {
@@ -32,6 +38,16 @@ android {
             )
         }
     }
+    // Modern packaging ensures .so files are uncompressed & 16KB-aligned
+    packaging {
+        jniLibs {
+            // modern packaging (don’t extract at install)
+            useLegacyPackaging = false
+        }
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -41,8 +57,14 @@ android {
     }
 }
 
-dependencies {
+tasks.withType<com.android.build.gradle.internal.tasks.PackageBundleTask>().configureEach {
+    doFirst {
+        println(">>> Packaging task usingLegacyPackaging? ${this.name}")
+    }
+}
 
+
+dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -70,10 +92,12 @@ dependencies {
     implementation(libs.converter.gson)
 
     implementation(libs.android.spinkit)
-
-    implementation(libs.tensorflow.lite)
-    implementation(libs.tensorflow.lite.support)
     implementation(libs.photofilter)
 
+    // LiteRT (successor to TensorFlow Lite) – 16KB compatible
+    implementation("com.google.ai.edge.litert:litert:1.4.0")
+    implementation("com.google.ai.edge.litert:litert-api:1.4.0")
+    implementation("com.google.ai.edge.litert:litert-support:1.4.0")
+    implementation("com.google.ai.edge.litert:litert-metadata:1.4.0")
 
 }

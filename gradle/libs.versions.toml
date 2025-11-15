@@ -1,6 +1,5 @@
 [versions]
-agp = "8.3.0"
-#agp = "8.7.3"
+agp = "8.8.0"
 androidSpinkit = "1.4.0"
 converterGson = "2.9.0"
 converterMoshi = "2.9.0"
@@ -65,4 +64,5 @@ tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", v
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
-kotlin1kept = { id = "kotlin-kapt" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+
